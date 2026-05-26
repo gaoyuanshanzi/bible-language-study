@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>성경 중국어/일본어 학습 서비스</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Background Glows -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <!-- Login Container -->
+  <div id="login-container" class="container active">
+    <div class="login-card glass">
+      <div class="login-header">
+        <div class="logo-icon"><i class="fa-solid fa-book-bible"></i></div>
+        <h1>성경 언어 학습기</h1>
+        <p>성경 구절로 공부하는 중국어와 일본어</p>
+      </div>
+
+      <form id="login-form">
+        <div class="input-group">
+          <label for="username"><i class="fa-solid fa-user"></i> 관리자 아이디</label>
+          <input type="text" id="username" value="admin" required placeholder="아이디를 입력하세요">
+        </div>
+
+        <div class="input-group">
+          <label for="password"><i class="fa-solid fa-lock"></i> 비밀번호</label>
+          <input type="password" id="password" value="123jesus" required placeholder="비밀번호를 입력하세요">
+        </div>
+
+        <div class="input-group">
+          <label for="api-key">
+            <i class="fa-solid fa-key"></i> Google Gemini API Key
+            <span class="tooltip-trigger"><i class="fa-solid fa-circle-info"></i>
+              <span class="tooltip">입력하지 않으면 서버의 기본 API Key를 사용합니다.</span>
+            </span>
+          </label>
+          <div class="password-input-wrapper">
+            <input type="password" id="api-key" placeholder="AI 분석을 위한 API Key 입력 (선택사항)">
+            <button type="button" id="toggle-api-key-visibility" class="btn-icon">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">로그인 <i class="fa-solid fa-arrow-right"></i></button>
+      </form>
+      <div id="login-error" class="error-msg hide"></div>
+    </div>
+  </div>
+
+  <!-- Main Dashboard Container -->
+  <div id="dashboard-container" class="container">
+    <div class="dashboard-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar glass">
+        <div class="sidebar-brand">
+          <i class="fa-solid fa-book-bible"></i>
+          <span>성경 언어 학습</span>
+        </div>
+        
+        <div class="user-profile">
+          <div class="avatar"><i class="fa-solid fa-user-shield"></i></div>
+          <div class="info">
+            <span class="username">관리자</span>
+            <span class="role">Administrator</span>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <ul>
+            <li class="nav-item active" data-tab="study-tab">
+              <a href="#"><i class="fa-solid fa-graduation-cap"></i> <span>학습하기</span></a>
+            </li>
+            <li class="nav-item" data-tab="history-tab">
+              <a href="#"><i class="fa-solid fa-history"></i> <span>학습 기록</span></a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+          <button id="logout-btn" class="btn btn-secondary btn-block">
+            <i class="fa-solid fa-sign-out-alt"></i> <span>로그아웃</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="main-content">
+        <!-- Study Tab -->
+        <section id="study-tab" class="tab-panel active">
+          <div class="panel-header">
+            <h2>성경 구절 학습 및 분석</h2>
+            <p>언어와 구절을 선택한 후 분석 버튼을 누르시면 한글 발음, 단어 분석, 문장 구조 분석을 해드립니다.</p>
+          </div>
+
+          <!-- Selector Box -->
+          <div class="selector-card glass">
+            <!-- Language cards -->
+            <div class="form-row">
+              <label class="section-label">학습 언어 선택</label>
+              <div class="lang-selector-group">
+                <button type="button" class="lang-btn active" data-lang="japanese">
+                  <div class="lang-btn-content">
+                    <span class="lang-title">일본어 (日本語)</span>
+                    <span class="lang-sub">후리가나 및 한글발음 포함</span>
+                  </div>
+                  <div class="lang-check"><i class="fa-solid fa-circle-check"></i></div>
+                </button>
+                <button type="button" class="lang-btn" data-lang="chinese">
+                  <div class="lang-btn-content">
+                    <span class="lang-title">중국어 (中文)</span>
+                    <span class="lang-sub">한어병음 및 성조 분석</span>
+                  </div>
+                  <div class="lang-check"><i class="fa-solid fa-circle-check"></i></div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Bible reference fields -->
+            <div class="bible-input-grid">
+              <div class="input-group autocomplete">
+                <label for="bible-book">성경 책 이름</label>
+                <div class="search-input-wrapper">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="bible-book" placeholder="예: 창세기, 마태복음" autocomplete="off">
+                </div>
+                <div id="autocomplete-list" class="autocomplete-items hide"></div>
+              </div>
+
+              <div class="input-group">
+                <label for="bible-chapter">장 (Chapter)</label>
+                <input type="number" id="bible-chapter" min="1" placeholder="1" value="1">
+              </div>
+
+              <div class="input-group">
+                <label for="bible-verse">절 (Verse)</label>
+                <input type="number" id="bible-verse" min="1" placeholder="1" value="1">
+              </div>
+
+              <div class="input-group action-group">
+                <button id="analyze-btn" class="btn btn-primary btn-glowing btn-block">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> 구절 분석 시작
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading Shimmer State -->
+          <div id="analysis-loading" class="loading-state glass hide">
+            <div class="loader-animation">
+              <div class="pulse-ring"></div>
+              <i class="fa-solid fa-book-open-reader book-icon"></i>
+            </div>
+            <h3>Gemini AI가 구절을 분석하고 있습니다...</h3>
+            <p>언어 발음 기호, 주요 단어 및 상세한 문장 구조를 추출하는 중입니다.</p>
+          </div>
+
+          <!-- Analysis Results View -->
+          <div id="analysis-result-view" class="result-view hide">
+            <!-- Verse Header Card -->
+            <div class="verse-card glass">
+              <div class="verse-header">
+                <div class="verse-reference">
+                  <i class="fa-solid fa-bookmark"></i>
+                  <span id="result-reference">창세기 1장 1절</span>
+                  <span id="cached-badge" class="badge badge-cached hide">임시저장됨</span>
+                </div>
+                <div class="tts-actions">
+                  <button id="tts-play-verse" class="btn btn-tts" title="전체 구절 듣기">
+                    <i class="fa-solid fa-volume-high"></i> 전체 발음 듣기
+                  </button>
+                </div>
+              </div>
+              
+              <div class="verse-text-block">
+                <div class="verse-korean">
+                  <span class="label">한글 성경</span>
+                  <p id="result-korean-text">태초에 하나님이 천지를 창조하시니라.</p>
+                </div>
+                
+                <div class="verse-foreign">
+                  <span class="label" id="result-foreign-label">일본어 번역</span>
+                  <p id="result-foreign-text" class="foreign-text">初めに神は天と地を創造された。</p>
+                </div>
+
+                <div class="translation-meaning-box">
+                  <div class="translation-field">
+                    <span id="meaning-title-label">직역</span>
+                    <p id="result-meaning">처음에 신은 하늘과 땅을 창조하셨다.</p>
+                  </div>
+                  <div class="pronunciation-field">
+                    <span id="pronunciation-title-label">한글 발음 / 병음</span>
+                    <p id="result-pronunciation">하지메니 카미와 텐토 치토오 소-조-사레타.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Details Layout Grid -->
+            <div class="details-grid">
+              <!-- Key Words Card -->
+              <div class="words-card glass">
+                <div class="card-header">
+                  <h3><i class="fa-solid fa-list-ol"></i> 1. 주요 단어 및 분석</h3>
+                </div>
+                <div class="card-body">
+                  <div id="words-container" class="words-grid">
+                    <!-- Word cards will be rendered dynamically here -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Grammar Structure Card -->
+              <div class="grammar-card glass">
+                <div class="card-header">
+                  <h3><i class="fa-solid fa-diagram-project"></i> 2. 문법 및 문장 구조 분석</h3>
+                </div>
+                <div class="card-body">
+                  <div id="grammar-container" class="grammar-list">
+                    <!-- Grammar analysis items will be rendered dynamically here -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- History Tab -->
+        <section id="history-tab" class="tab-panel">
+          <div class="panel-header">
+            <h2>학습 기록 관리</h2>
+            <p>이전에 분석했던 성경 구절을 다시 보거나 삭제할 수 있습니다. 저장된 기록은 API 요청 없이 바로 표시됩니다.</p>
+          </div>
+
+          <div class="history-table-card glass">
+            <div class="table-responsive">
+              <table class="history-table">
+                <thead>
+                  <tr>
+                    <th>일시</th>
+                    <th>언어</th>
+                    <th>구절</th>
+                    <th>본문 요약</th>
+                    <th>작업</th>
+                  </tr>
+                </thead>
+                <tbody id="history-list-body">
+                  <!-- History items will be loaded dynamically here -->
+                </tbody>
+              </table>
+              <div id="history-empty-msg" class="empty-state hide">
+                <i class="fa-solid fa-folder-open"></i>
+                <p>아직 학습한 기록이 없습니다. 새로운 구절을 분석해 보세요!</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
