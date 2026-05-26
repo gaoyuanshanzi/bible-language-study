@@ -245,7 +245,7 @@ analyzeBtn.addEventListener('click', async () => {
   const verse = bibleVerseInput.value.trim();
 
   if (!book) {
-    alert('성경 책 이름을 입력 또는 선택해주세요.');
+    alert('Bible 책 이름을 입력 또는 선택해주세요.');
     bibleBookInput.focus();
     return;
   }
