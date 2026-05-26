@@ -116,9 +116,9 @@ Generate the analysis as a JSON object matching this schema exactly:
   "korean_text": "Standard Korean Bible verse (개역개정)",
   "foreign_text": "Japanese translation (口語訳 or similar)",
   "translation_or_meaning": "직역: [Literal Korean translation]",
-  "pronunciation_or_pinyin": "한글 발음: [Korean pronunciation of the whole sentence]",
+  "pronunciation_or_pinyin": "한글 발음: [Write the pronunciation of the Japanese sentence using Korean characters (한글). For example, 神は世を愛 → 카미와 요오 아이. Do NOT write Korean translation, only phonetic transcription of the Japanese sounds in Korean]",
   "key_words": [
-    { "word": "Japanese word", "reading": "Hiragana furigana", "pronunciation": "Korean pronunciation", "meaning": "Korean meaning" }
+    { "word": "Japanese word", "reading": "Hiragana furigana", "pronunciation": "Korean phonetic transcription of Japanese pronunciation (e.g. 神→카미)", "meaning": "Korean meaning" }
   ],
   "grammar_analysis": [
     { "expression": "Japanese phrase", "structure": "구조: [breakdown]", "explanation": "Korean grammar explanation" }

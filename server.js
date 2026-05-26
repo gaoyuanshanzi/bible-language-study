@@ -162,12 +162,12 @@ Generate the analysis as a JSON object matching this schema:
   "korean_text": "Standard Korean Bible verse translation (개역한글 or 개역개정)",
   "foreign_text": "Japanese translation of the verse (standard Kougo-yaku or similar version)",
   "translation_or_meaning": "직역: [Literal translation in Korean]",
-  "pronunciation_or_pinyin": "한글 발음: [Korean pronunciation of the whole Japanese verse]",
+  "pronunciation_or_pinyin": "한글 발음: [Write how the Japanese verse SOUNDS in Korean phonetic characters (한글). This is a phonetic transcription of the Japanese pronunciation, NOT a Korean translation. e.g. 神は世を愛された → 카미와 요오 아이사레타]",
   "key_words": [
     {
       "word": "Japanese word (e.g. 初めに)",
       "reading": "Furigana in Hiragana (e.g. はじめに)",
-      "pronunciation": "Korean pronunciation (e.g. 하지메니)",
+      "pronunciation": "Korean phonetic transcription of Japanese sound (e.g. 하지메니 — NOT a Korean translation)",
       "meaning": "Meaning in Korean (e.g. 태초에, 처음에)"
     }
   ],
