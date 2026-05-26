@@ -58,6 +58,7 @@ const resultPronunciation = document.getElementById('result-pronunciation');
 const wordsContainer = document.getElementById('words-container');
 const grammarContainer = document.getElementById('grammar-container');
 const ttsPlayVerseBtn = document.getElementById('tts-play-verse');
+const exportTxtBtn = document.getElementById('export-txt-btn');
 
 // History Panel Elements
 const historyListBody = document.getElementById('history-list-body');
@@ -388,6 +389,73 @@ function renderAnalysisResult(data) {
 
   // Scroll to results smoothly
   analysisResultView.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// TXT Export Logic
+exportTxtBtn.addEventListener('click', () => {
+  if (!activeAnalysisData) return;
+  exportToTxt(activeAnalysisData);
+});
+
+function exportToTxt(data) {
+  const lang = selectedLanguage === 'japanese' ? '일본어' : '중국어';
+  const lines = [];
+
+  lines.push('═══════════════════════════════════════════════════');
+  lines.push(`  Bible 구절 분석 결과 [${lang}]`);
+  lines.push('═══════════════════════════════════════════════════');
+  lines.push(`  구절: ${data.book} ${data.chapter}장 ${data.verse}절`);
+  lines.push('───────────────────────────────────────────────────');
+  lines.push('');
+  lines.push('【 한글 성경 】');
+  lines.push(data.korean_text || '');
+  lines.push('');
+  lines.push(`【 ${lang} 번역 】`);
+  lines.push(data.foreign_text || '');
+  lines.push('');
+  lines.push('【 직역 / 의미 】');
+  lines.push(data.translation_or_meaning || '');
+  lines.push('');
+  lines.push('【 한글 발음 】');
+  lines.push(data.pronunciation_or_pinyin || '');
+  lines.push('');
+  lines.push('───────────────────────────────────────────────────');
+  lines.push('【 주요 단어 분석 】');
+  lines.push('───────────────────────────────────────────────────');
+  if (data.key_words && data.key_words.length > 0) {
+    data.key_words.forEach((w, i) => {
+      lines.push(`${i + 1}. ${w.word}`);
+      lines.push(`   읽기(후리가나/병음): ${w.reading}`);
+      lines.push(`   한글 발음: ${w.pronunciation}`);
+      lines.push(`   의미: ${w.meaning}`);
+      lines.push('');
+    });
+  }
+  lines.push('───────────────────────────────────────────────────');
+  lines.push('【 문법 및 문장 구조 분석 】');
+  lines.push('───────────────────────────────────────────────────');
+  if (data.grammar_analysis && data.grammar_analysis.length > 0) {
+    data.grammar_analysis.forEach((g, i) => {
+      lines.push(`${i + 1}. ${g.expression}`);
+      lines.push(`   ${g.structure}`);
+      lines.push(`   ${g.explanation}`);
+      lines.push('');
+    });
+  }
+  lines.push('═══════════════════════════════════════════════════');
+  lines.push(`  생성일시: ${new Date().toLocaleString('ko-KR')}`);
+  lines.push('═══════════════════════════════════════════════════');
+
+  const content = lines.join('\n');
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Bible_${data.book}_${data.chapter}장${data.verse}절_${lang}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 // Text to Speech logic
